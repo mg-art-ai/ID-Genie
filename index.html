@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Instructional Design Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            typography: ({ theme }) => ({
+              DEFAULT: {
+                css: {
+                  '--tw-prose-body': 'var(--color-text-base)',
+                  '--tw-prose-headings': 'var(--color-text-heading)',
+                  '--tw-prose-lead': 'var(--color-text-muted)',
+                  '--tw-prose-links': 'var(--color-primary)',
+                  '--tw-prose-bold': 'var(--color-text-heading)',
+                  '--tw-prose-counters': 'var(--color-text-muted)',
+                  '--tw-prose-bullets': 'var(--color-border)',
+                  '--tw-prose-hr': 'var(--color-border)',
+                  '--tw-prose-quotes': 'var(--color-text-heading)',
+                  '--tw-prose-quote-borders': 'var(--color-border)',
+                  '--tw-prose-captions': 'var(--color-text-muted)',
+                  '--tw-prose-code': 'var(--color-secondary-accent)',
+                  '--tw-prose-pre-code': 'var(--color-secondary-accent)',
+                  '--tw-prose-pre-bg': 'var(--color-background-body)',
+                  '--tw-prose-th-borders': 'var(--color-border)',
+                  '--tw-prose-td-borders': 'var(--color-border)',
+                  
+                  // Explicitly map elements to vars to ensure plugin overrides don't stick to defaults
+                  color: 'var(--color-text-base)',
+                  h1: { color: 'var(--color-text-heading)' },
+                  h2: { color: 'var(--color-text-heading)' },
+                  h3: { color: 'var(--color-text-heading)' },
+                  h4: { color: 'var(--color-text-base)' },
+                  strong: { color: 'var(--color-text-heading)' },
+                  a: { color: 'var(--color-primary)' },
+                  code: { color: 'var(--color-secondary-accent)' },
+                  blockquote: { 
+                    color: 'var(--color-text-muted)',
+                    borderLeftColor: 'var(--color-primary)',
+                  },
+                },
+              },
+            }),
+          },
+        },
+      }
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.29.0",
+    "marked": "https://cdn.jsdelivr.net/npm/marked@13.0.0/lib/marked.esm.js"
+  }
+}
+</script>
+<style>
+    :root, .theme-cyber-glow {
+      /* Light Mode - Cyber Glow */
+      --color-primary: #0891b2; /* Cyan 600 */
+      --color-primary-hover: #06b6d4; /* Cyan 500 */
+      --color-primary-focus-ring: #22d3ee; /* Cyan 400 */
+      --color-secondary-accent: #c026d3; /* Fuchsia 600 */
+      --color-background-body: #f1f5f9; /* Slate 100 */
+      --color-background-card: #ffffff; /* White */
+      --color-border: #e2e8f0; /* Slate 200 */
+      --color-text-base: #334155; /* Slate 700 */
+      --color-text-muted: #64748b; /* Slate 500 */
+      --color-text-heading: #0f172a; /* Slate 900 */
+      --color-text-on-primary: #ffffff; /* White */
+    }
+
+    .dark .theme-cyber-glow {
+      /* Dark Mode - Cyber Glow */
+      --color-primary: #22d3ee; /* Cyan 400 */
+      --color-primary-hover: #67e8f9; /* Cyan 300 */
+      --color-primary-focus-ring: #a5f3fc; /* Cyan 200 */
+      --color-secondary-accent: #f0abfc; /* Fuchsia 300 */
+      --color-background-body: #020617; /* Slate 950 */
+      --color-background-card: #0f172a; /* Slate 900 */
+      --color-border: #334155; /* Slate 700 */
+      --color-text-base: #cbd5e1; /* Slate 300 */
+      --color-text-muted: #94a3b8; /* Slate 400 */
+      --color-text-heading: #f1f5f9; /* Slate 100 */
+      --color-text-on-primary: #0f172a; /* Slate 900 */
+    }
+
+    .theme-sunset-flare {
+      /* Light Mode - Sunset Flare */
+      --color-primary: #ea580c; /* Orange 600 */
+      --color-primary-hover: #f97316; /* Orange 500 */
+      --color-primary-focus-ring: #fb923c; /* Orange 400 */
+      --color-secondary-accent: #d946ef; /* Fuchsia 500 */
+      --color-background-body: #f8fafc; /* Slate 50 */
+      --color-background-card: #ffffff; /* White */
+      --color-border: #e2e8f0; /* Slate 200 */
+      --color-text-base: #334155; /* Slate 700 */
+      --color-text-muted: #64748b; /* Slate 500 */
+      --color-text-heading: #1e293b; /* Slate 800 */
+      --color-text-on-primary: #ffffff; /* White */
+    }
+
+    .dark .theme-sunset-flare {
+      /* Dark Mode - Sunset Flare */
+      --color-primary: #f97316; /* Orange 500 */
+      --color-primary-hover: #fb923c; /* Orange 400 */
+      --color-primary-focus-ring: #fdba74; /* Orange 300 */
+      --color-secondary-accent: #e879f9; /* Fuchsia 400 */
+      --color-background-body: #1e1b4b; /* Indigo 950 */
+      --color-background-card: #312e81; /* Indigo 900 */
+      --color-border: #4338ca; /* Indigo 700 */
+      --color-text-base: #e0e7ff; /* Indigo 200 */
+      --color-text-muted: #c7d2fe; /* Indigo 300 */
+      --color-text-heading: #eef2ff; /* Indigo 100 */
+      --color-text-on-primary: #ffffff; /* White */
+    }
+
+    .theme-forest-mint {
+      /* Light Mode - Forest Mint */
+      --color-primary: #059669; /* Emerald 600 */
+      --color-primary-hover: #10b981; /* Emerald 500 */
+      --color-primary-focus-ring: #34d399; /* Emerald 400 */
+      --color-secondary-accent: #84cc16; /* Lime 500 */
+      --color-background-body: #f0fdf4; /* Green 50 */
+      --color-background-card: #ffffff; /* White */
+      --color-border: #d1fae5; /* Green 200 */
+      --color-text-base: #374151; /* Gray 700 */
+      --color-text-muted: #6b7280; /* Gray 500 */
+      --color-text-heading: #1f2937; /* Gray 800 */
+      --color-text-on-primary: #ffffff; /* White */
+    }
+
+    .dark .theme-forest-mint {
+      /* Dark Mode - Forest Mint */
+      --color-primary: #34d399; /* Emerald 400 */
+      --color-primary-hover: #6ee7b7; /* Emerald 300 */
+      --color-primary-focus-ring: #a7f3d0; /* Emerald 200 */
+      --color-secondary-accent: #a3e635; /* Lime 400 */
+      --color-background-body: #064e3b; /* Emerald 950 */
+      --color-background-card: #047857; /* Emerald 800 */
+      --color-border: #065f46; /* Emerald 900 */
+      --color-text-base: #d1fae5; /* Emerald 100 */
+      --color-text-muted: #a7f3d0; /* Emerald 200 */
+      --color-text-heading: #ecfdf5; /* Emerald 50 */
+      --color-text-on-primary: #064e3b; /* Emerald 950 */
+    }
+    
+    .theme-crimson-night {
+      /* Light Mode - Crimson Night */
+      --color-primary: #dc2626; /* Red 600 */
+      --color-primary-hover: #ef4444; /* Red 500 */
+      --color-primary-focus-ring: #f87171; /* Red 400 */
+      --color-secondary-accent: #f59e0b; /* Amber 500 */
+      --color-background-body: #f9fafb; /* Gray 50 */
+      --color-background-card: #ffffff; /* White */
+      --color-border: #e5e7eb; /* Gray 200 */
+      --color-text-base: #374151; /* Gray 700 */
+      --color-text-muted: #6b7280; /* Gray 500 */
+      --color-text-heading: #111827; /* Gray 900 */
+      --color-text-on-primary: #ffffff; /* White */
+    }
+
+    .dark .theme-crimson-night {
+      /* Dark Mode - Crimson Night */
+      --color-primary: #ef4444; /* Red 500 */
+      --color-primary-hover: #f87171; /* Red 400 */
+      --color-primary-focus-ring: #fca5a5; /* Red 300 */
+      --color-secondary-accent: #fcd34d; /* Amber 300 */
+      --color-background-body: #111827; /* Gray 900 */
+      --color-background-card: #1f2937; /* Gray 800 */
+      --color-border: #4b5563; /* Gray 600 */
+      --color-text-base: #d1d5db; /* Gray 300 */
+      --color-text-muted: #9ca3af; /* Gray 400 */
+      --color-text-heading: #f9fafb; /* Gray 50 */
+      --color-text-on-primary: #ffffff; /* White */
+    }
+    
+    /* Custom Prose Enhancements for Visibility */
+    .prose code {
+      padding: 0.125em 0.3em;
+      border-radius: 0.3em;
+      font-weight: 500;
+      /* Using a semi-transparent background derived from the theme's accent color */
+      background-color: color-mix(in srgb, var(--color-secondary-accent) 15%, transparent);
+    }
+
+    .dark .prose code {
+      background-color: color-mix(in srgb, var(--color-secondary-accent) 20%, transparent);
+    }
+
+    .prose pre {
+      border: 1px solid var(--color-border);
+      border-radius: 0.5rem;
+      /* The background is set by prose vars to --color-background-body, which provides nice contrast against --color-background-card */
+    }
+
+    .prose code::before, .prose code::after {
+        content: "" !important; /* Disables backticks around inline code */
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+        width: 12px;
+        height: 12px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: var(--color-border);
+        border-radius: 20px;
+        border: 3px solid var(--color-background-body);
+        transition: background-color 0.2s;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: var(--color-text-muted);
+    }
+
+    /* Enhanced Prose Styles for Readability & Hierarchy */
+    .prose h3 {
+      font-weight: 700;
+      color: var(--color-text-heading);
+      margin-top: 2em;
+      margin-bottom: 1em;
+      padding-bottom: 0.5em;
+      border-bottom: 1px solid var(--color-border);
+    }
+    
+    .prose h4 {
+      font-weight: 700;
+      color: var(--color-text-base);
+      margin-top: 2em;
+      margin-bottom: 0.75em;
+    }
+
+    .prose p, .prose li {
+      line-height: 1.75;
+    }
+    
+    .prose ul, .prose ol {
+        margin-top: 1em;
+        padding-left: 1.5em;
+    }
+
+    .prose li {
+        margin-top: 0.75em;
+    }
+    
+    .prose blockquote {
+      font-style: italic;
+      color: var(--color-text-muted);
+      border-left-color: var(--color-primary);
+      padding-left: 1em;
+    }
+
+    .prose hr {
+        margin-top: 3.5em;
+        margin-bottom: 3.5em;
+        border-color: var(--color-border);
+        border-top-width: 2px;
+    }
+
+    .prose strong {
+        font-weight: 700;
+        color: var(--color-text-heading);
+    }
+
+    /* Remove extra top margin from the very first element in the generated output */
+    .generated-output-container > *:first-child {
+        margin-top: 0 !important;
+    }
+</style>
+</head>
+  <body class="bg-[--color-background-body] transition-colors duration-300">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

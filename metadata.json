@@ -1,0 +1,6 @@
+{
+  "name": "Instructional Design Generator",
+  "description": "An application that takes a content data dump and selected instructional design models to generate various learning solutions like e-learning storyboards, training guides, and more using the Gemini API.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
